@@ -16,6 +16,8 @@ gameOver= false,
 playerWon= false,
 dealerCards=[],
 playerCards=[],
+dealerScore=0,
+playerScore=0,
 deck=[];
 
 
@@ -107,4 +109,26 @@ function getNumbericCardValue(card){
     default:
       return 10;
     }
+}
+
+function getScore(cardArray){
+    let score=0,
+    hadAce=false;
+
+    for(let i=0;i<cardArray.length;i++){
+        let card= cardArray[i];
+        score +=getNumbericCardValue(card);
+        if(card.value==='Ace'){
+            hasAce=true;
+        }
+    }
+    if(hasAce && score+10<=21){
+        return score+10;
+    }
+    return score;
+}
+
+function updateScores(){
+    dealerScore=getScore(dealerCards);
+    playerScore=getScore(playerCards);
 }
