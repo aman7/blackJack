@@ -7,7 +7,8 @@ let suits=['Hearts','Clubs','Diamonds','Spades'],
 //dom variables
 let newGameButton=document.getElementById('new-game-button'),
     hitButton=document.getElementById('hit-button'),
-    stayButton=document.getElementById('stay-button');
+    stayButton=document.getElementById('stay-button'),
+    textArea=document.getElementById('text-area');
 
 
 //game variables
@@ -112,9 +113,8 @@ function getNumbericCardValue(card){
 }
 
 function getScore(cardArray){
-    let score=0,
-    hadAce=false;
-
+    let score=0;
+    let hasAce=false;
     for(let i=0;i<cardArray.length;i++){
         let card= cardArray[i];
         score +=getNumbericCardValue(card);
@@ -131,4 +131,75 @@ function getScore(cardArray){
 function updateScores(){
     dealerScore=getScore(dealerCards);
     playerScore=getScore(playerCards);
+}
+
+function checkForEndOfGame(){
+    updateScores();
+
+    if(gameOver){
+        while(dealerScore < playerScore && playerScore<=21 && dealerScore<=21){
+            dealerCards.push(getNextcard());
+            updateScores();
+        }
+
+    }
+
+    if(playerScore>21){
+        playerWon=false;
+        gameOver=true;
+    }
+    else if(dealerScore>21){
+        playerWon=true;
+        gameOver=true;
+    }
+    else if(gameOver){
+        if(playerScore>dealerScore){
+            playerWon=true;
+        }
+        else{
+            playerWon=false;
+        }
+
+    }
+}
+
+function showStatus(){
+    if(!gameStarted){
+        textArea.innerHTML='Welcome To BlackJack!';
+        return;
+    }
+
+    let dealerCardString="";
+    for(let i=0;i<dealerCardString.length;i++){
+        dealerCardString +=getCardString(dealerCards[i])+"\n";
+    }
+
+    let playerCardString="";
+    for(let i=0;i<playerCardString.length;i++){
+        playerCardString +=playerCardString(playerCardS[i])+'\n';
+    }
+
+    updateScores();
+    textArea.innerText=
+    'Dealer has\n'+
+    dealerCardString +
+    '(Score :'+ dealerScore +')\n\n'+
+
+    'Player has\n'+
+    playerCardString +
+    '(Score :'+ playerScore +')\n\n';
+
+    if(gameOver){
+        if(playerWon){
+            textArea.innerText+='You Win';
+        }
+        else{
+            textArea.innerText+='Dealer wins';
+        }
+        newGameButton.style.display='inline';
+        hitButton.style.display='none';
+        stayButton.style.display='none';
+    }
+
+
 }
