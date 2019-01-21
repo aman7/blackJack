@@ -15,6 +15,7 @@ let newGameButton=document.getElementById('new-game-button'),
 let gameStarted = false,
 gameOver= false,
 playerWon= false,
+tie=false;
 dealerCards=[],
 playerCards=[],
 dealerScore=0,
@@ -147,17 +148,25 @@ function checkForEndOfGame(){
     if(playerScore>21){
         playerWon=false;
         gameOver=true;
+        tie=false;
     }
     else if(dealerScore>21){
         playerWon=true;
         gameOver=true;
+        tie=false;
     }
     else if(gameOver){
-        if(playerScore>dealerScore){
+        if(playerScore==dealerScore){
+            playerWon=false;
+            tie=true;
+        }
+        else if(playerScore>dealerScore){
             playerWon=true;
+            tie=false;
         }
         else{
             playerWon=false;
+            tie=false;
         }
 
     }
@@ -192,6 +201,9 @@ function showStatus(){
     if(gameOver){
         if(playerWon){
             textArea.innerText+='You Win';
+        }
+        else if(tie){
+            textArea.innerText+='Match Tie';
         }
         else{
             textArea.innerText+='Dealer wins';
